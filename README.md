@@ -46,8 +46,10 @@ A REST API built with Django and Django REST Framework for tracking job applicat
 ```
 
 4. Create a `.env` file in the project root
+```
 SECRET_KEY=your-secret-key-here
 DEBUG=True
+```
 
 5. Run migrations
 ```bash
@@ -81,12 +83,15 @@ DEBUG=True
 | DELETE | `/api/jobs/<id>/` | Delete a job |
 | GET | `/api/jobs/stats/` | Get application counts by status |
 
-### Query Parameters
+## Query Parameters
 
 Filter and search jobs:
+
+```
 GET /api/jobs/?status=applied
 GET /api/jobs/?search=google
 GET /api/jobs/?status=interview&search=developer
+```
 
 ## Sample Requests
 
@@ -130,18 +135,21 @@ Authorization: Bearer <access_token>
 ```
 
 ## Project Structure
+
+```
 JobTrackerAPI/
-├── accounts/          # User auth app
-│   ├── models.py      # Custom User model
-│   ├── views.py       # Register, Logout views
-│   └── urls.py        # Auth endpoints
-├── jobs/              # Jobs app
-│   ├── models.py      # Job model
-│   ├── serializers.py # JobSerializer
-│   ├── views.py       # CRUD + Stats views
-│   └── urls.py        # Job endpoints
-├── jobtracker/        # Project config
-│   ├── settings.py
-│   └── urls.py
-├── requirements.txt
-└── .env               # Not committed - see setup
+    accounts/
+        models.py      # Custom User model
+        views.py       # Register, Logout views
+        urls.py        # Auth endpoints
+    jobs/
+        models.py      # Job model
+        serializers.py # JobSerializer
+        views.py       # CRUD + Stats views
+        urls.py        # Job endpoints
+    jobtracker/
+        settings.py
+        urls.py
+    requirements.txt
+    .env               # Not committed - see setup
+```
