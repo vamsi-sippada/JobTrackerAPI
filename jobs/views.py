@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from rest_framework import generics
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from django.db.models import Count, Q
 from .models import Job
 from .serializers import JobSerializer
-from rest_framework.permissions import IsAuthenticated
 
 class JobListCreateView(generics.ListCreateAPIView):
 
@@ -28,9 +31,24 @@ class JobListCreateView(generics.ListCreateAPIView):
         serializer.save(user=self.request.user)
 
 class JobDetailView(generics.RetrieveUpdateDestroyAPIView):
-
     serializer_class = JobSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Job.objects.filter(user=self.request.user)
+    
+class JobStatsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        queryset = Job.objects.filter(user=request.user)
+
+        stats = queryset.aggregate(
+            total=Count('id'),
+            applied=Count('id', filter=Q(status='applied')),
+            interview=Count('id', filter=Q(status='interview')),
+            rejected=Count('id', filter=Q(status='rejected')),
+            offer=Count('id', filter=Q(status='offer')),
+        )
+
+        return Response(stats)
